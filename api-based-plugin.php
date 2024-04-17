@@ -1,4 +1,5 @@
 <?php
+
 /**
  * API Based Plugin
  *
@@ -7,7 +8,7 @@
  * @wordpress-plugin
  * Plugin Name:       API Based Plugin
  * Plugin URI:        https://github.com/yuriipavlov/api-based-plugin
- * Description:       WordPress simple plugin that retrieves data from a remote API endpoint, and makes that data accessible/retrievable from an API endpoint on the WordPress site your plugin is installed on. The data will be displayed via a custom block and on an admin WordPress page as described.
+ * Description:       Retrieves data from a remote API and exposes it via a custom block and an admin WordPress page.
  * Version:           1.0.0
  * Requires at least: 6.0
  * Requires PHP:      8.1
@@ -31,8 +32,26 @@ use Psr\Container\ContainerInterface;
  * @package    API Based
  */
 
-if (PHP_VERSION_ID < 80100) {
-    error_log(sprintf(__('Plugin requires at least PHP %s (You are using PHP %s) '), '8.1', PHP_VERSION));
+//define plugin path and url without slash
+define('API_BASED_PLUGIN_DIR', __DIR__);
+define('API_BASED_PLUGIN_FILE', __FILE__);
+define('API_BASED_PLUGIN_URL', plugins_url('', __FILE__));
+
+define('API_BASED_PLUGIN_PHP_VERSION_ID', 80100);
+
+if (PHP_VERSION_ID < API_BASED_PLUGIN_PHP_VERSION_ID) {
+    $major = floor(API_BASED_PLUGIN_PHP_VERSION_ID / 10000);
+    $minor = floor((API_BASED_PLUGIN_PHP_VERSION_ID % 10000) / 100);
+
+    $apiBasedPluginPhpVersion = "{$major}.{$minor}";
+
+    error_log(
+        sprintf(
+            __('Plugin requires at least PHP %s (You are using PHP %s) '),
+            $apiBasedPluginPhpVersion,
+            PHP_VERSION
+        )
+    );
     if (!is_admin()) {
         wp_die(__('Plugin requires a higher PHP Version. Please check the Logs for more details.'));
     }
@@ -47,7 +66,6 @@ if (PHP_VERSION_ID < 80100) {
         $container = apply_filters('api_based_plugin/container', require __DIR__ . '/config/container.php');
 
         App::instance()->run($container);
-
     } catch (Throwable $throwable) {
         try {
             ErrorHandler::handleThrowable($throwable);

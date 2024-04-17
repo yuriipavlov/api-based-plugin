@@ -1,6 +1,6 @@
 {
   "name": "yuriipavlov/api-based-plugin",
-  "description": "WordPress simple plugin that retrieves data from a remote API endpoint, and makes that data accessible/retrievable from an API endpoint on the WordPress site your plugin is installed on. The data will be displayed via a custom block and on an admin WordPress page as described",
+  "description": "Retrieves data from a remote API and exposes it via a custom block and an admin WordPress page",
   "type": "wordpress-plugin",
   "license": "MIT",
   "authors": [
