@@ -44,26 +44,6 @@ if (!function_exists('elog')) {
     }
 }
 
-if (!function_exists('ilog')) {
-    /**
-     * Write to info log
-     * Wrapper for wlog() function with info log destination
-     *
-     * @param mixed  $var
-     * @param string $desc
-     *
-     * @return void
-     */
-    function ilog(mixed $var, string $desc = ' >> '): void
-    {
-        $logFileDestination = '';
-        if (defined('APP_INFO_LOG') and !empty(APP_INFO_LOG)) {
-            $logFileDestination = APP_INFO_LOG;
-        }
-        elog($var, $desc, $logFileDestination);
-    }
-}
-
 if (!function_exists('wlog')) {
     function wlog($var, $desc = ' >> ', $clear_log = false)
     {
