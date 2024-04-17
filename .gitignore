@@ -1,0 +1,60 @@
+#==================#
+#     OS Files     #
+#==================#
+*.DS_Store
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+*[Tt]humbs.db
+*.Trashes
+
+
+#===================#
+#     IDE Files     #
+#===================#
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace
+*.komodoproject
+*.codekit3
+
+
+#===================================#
+#    Log, map files, secret .env    #
+#===================================#
+*.log
+error_log
+access_log
+.sass-cache
+*.css.map
+*.js.map
+*.LICENSE
+*.lck
+.phpunit.result.cache
+
+
+#===================================#
+#       Vendor and npm Files        #
+#===================================#
+node_modules
+vendor
+.stylelintcache
+.eslintcache
+# If we are using custom dependency we should run composer update everywhere
+# to update to last changes without lock file
+#composer.lock
+# Same for npm, if we need to use last version of custom package, we shoul ignore lock
+#package-lock.json
+#mix-manifest.json
+
+
+#=============================================================#
+#       Compiled code. It should not always be tracked.       #
+#=============================================================#
+assets/build/*
+blocks/**/build/*
+!blocks/**/build/*asset.php
