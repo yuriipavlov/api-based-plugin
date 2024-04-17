@@ -30,5 +30,17 @@ class Hooks
         add_action('after_setup_theme', [Handlers\Settings\PluginSettings::class, 'boot']);
         add_action('carbon_fields_register_fields', [Handlers\Settings\PluginSettings::class, 'make']);
         add_filter('plugin_action_links', [Handlers\Settings\PluginSettings::class, 'addActionLinks'], 10, 2);
+
+        /************************************
+         *         Gutenberg blocks
+         ************************************/
+        add_action('block_categories_all', [Handlers\Blocks\Register::class, 'registerBlocksCategories']);
+        add_action('init', [Handlers\Blocks\Register::class, 'registerBlocks']);
+
+
+        /************************************
+         *               Back
+         ************************************/
+        add_action('enqueue_block_editor_assets', [Handlers\Back::class, 'enqueueBlockEditorAssets']);
     }
 }
