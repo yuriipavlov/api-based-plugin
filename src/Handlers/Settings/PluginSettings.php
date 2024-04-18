@@ -51,8 +51,7 @@ class PluginSettings
         $container->add_tab(
             __('General', 'api-based-plugin'),
             [
-                Field::make('separator', $prefix . 'sep_general_identity', esc_html__('Identity', 'api-based-plugin')),
-                Field::make('text', $prefix . 'endpoint_url', esc_html__('External endpoint URL', 'api-based-plugin'))
+                Field::make('text', $prefix . 'data_source_url', esc_html__('External data source URL', 'api-based-plugin'))
                     ->set_attribute('placeholder', 'https://example.com/v1/endpoint/ ')
                     ->set_width(50),
             ]

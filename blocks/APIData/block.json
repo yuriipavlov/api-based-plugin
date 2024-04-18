@@ -1,0 +1,27 @@
+{
+  "apiVersion": 3,
+  "name": "api-based-plugin/api-data",
+  "title": "API Data",
+  "category": "api-based-plugin",
+  "icon": "sk sk-news",
+  "description": "Show API Data",
+  "keywords": [
+    "API",
+    "Data",
+    "Show"
+  ],
+  "textdomain": "",
+  "styles": [],
+  "supports": {},
+  "example": {},
+  "attributes": {
+    "columns": {
+      "type": "object",
+      "default": {}
+    }
+  },
+  "editorScript": "file:build/index.js",
+  "viewScript": "file:build/view.js",
+  "editorStyle": "file:build/editor.css",
+  "style": "file:build/style.css"
+}
