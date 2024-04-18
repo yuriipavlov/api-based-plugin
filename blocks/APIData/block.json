@@ -16,8 +16,8 @@
   "example": {},
   "attributes": {
     "columns": {
-      "type": "object",
-      "default": {}
+      "type": "array",
+      "default": []
     }
   },
   "editorScript": "file:build/index.js",

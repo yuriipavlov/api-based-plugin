@@ -54,6 +54,12 @@ class BlockRenderer extends BlockAbstract
             'callback'            => [self::class, 'getDataCallback'],
             'permission_callback' => '__return_true',
         ]);
+
+        register_rest_route(Config::get('restApiNamespace'), '/get-table-headers', [
+            'methods'             => 'GET',
+            'callback'            => [self::class, 'getTableHeaders'],
+            'permission_callback' => [self::class, 'getTableHeadersPermissionCheck'],
+        ]);
     }
 
     /**
@@ -82,5 +88,22 @@ class BlockRenderer extends BlockAbstract
         $APIData = APIDataRepository::getAPIData();
 
         return rest_ensure_response($APIData);
+    }
+
+    public static function getTableHeaders(): WP_Error|WP_REST_Response|WP_HTTP_Response
+    {
+        $APIData = APIDataRepository::getAPIData();
+
+        return rest_ensure_response($APIData->data->headers);
+    }
+
+    /**
+     * Allow only backend users to get menus data
+     *
+     * @return bool
+     */
+    public static function getTableHeadersPermissionCheck(): bool
+    {
+        return current_user_can('edit_posts');
     }
 }
