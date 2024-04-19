@@ -30,6 +30,7 @@ class Hooks
         add_action('after_setup_theme', [Handlers\Settings\PluginSettings::class, 'boot']);
         add_action('carbon_fields_register_fields', [Handlers\Settings\PluginSettings::class, 'make']);
         add_filter('plugin_action_links', [Handlers\Settings\PluginSettings::class, 'addActionLinks'], 10, 2);
+        add_action('admin_menu', [Handlers\AdminShowData::class, 'addPageToMenu']);
 
         /************************************
          *         Gutenberg blocks
