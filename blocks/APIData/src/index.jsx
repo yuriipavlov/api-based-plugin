@@ -12,6 +12,7 @@ const {InspectorControls} = wp.blockEditor;
 const {PanelBody, CheckboxControl, Spinner} = wp.components;
 const {serverSideRender: ServerSideRender} = wp;
 const {useState, useEffect} = wp.element;
+const {__} = wp.i18n;
 
 registerBlockType(metadata, {
   edit: (props) => {
@@ -30,13 +31,13 @@ registerBlockType(metadata, {
         })
         .catch(error => {
           // eslint-disable-next-line no-console
-          console.error('Error fetching table headers: ', error);
+          console.error(__('Error fetching table headers: ', 'api-based-plugin'), error);
         });
     }, []); // The empty dependency array ensures this effect runs only once when the component mounts
 
     const renderControls = (
       <InspectorControls key="API Data Settings">
-        <PanelBody title="Headers" initialOpen={true}>
+        <PanelBody title={__('Headers', 'api-based-plugin')} initialOpen={true}>
           {headers.length < 1
             ? <Spinner key="siteSpinner"/>
             : (
