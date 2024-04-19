@@ -4,8 +4,8 @@ namespace APIBasedPluginBlocks\APIData;
 
 defined('ABSPATH') || exit;
 
-use APIBasedPlugin\Helper\Config;
 use APIBasedPlugin\Handlers\Blocks\BlockAbstract;
+use APIBasedPlugin\Helper\Config;
 use APIBasedPlugin\Helper\NotFoundException;
 use APIBasedPlugin\Repository\APIDataRepository;
 use Psr\Container\ContainerExceptionInterface;
@@ -31,12 +31,21 @@ class BlockRenderer extends BlockAbstract
      * @param $block
      *
      * @return string
+     *
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundException
+     * @throws NotFoundExceptionInterface
      */
     public static function blockServerSideCallback($attributes, $content, $block): string
     {
         $templateData = [];
+
         $APIData = APIDataRepository::getAPIData();
-        $templateData['apiData']     = $APIData;
+
+        $templateData['apiData'] = $APIData;
+        $templateData['columns'] = !empty($attributes['columns']) ? $attributes['columns'] : [];
+
+        asort($templateData['columns']);
 
         return self::loadBlockView('layout', $templateData);
     }
@@ -46,6 +55,10 @@ class BlockRenderer extends BlockAbstract
      * Runs by Blocks Register Handler
      *
      * @return void
+     *
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundException
+     * @throws NotFoundExceptionInterface
      */
     public static function blockRestApiEndpoints(): void
     {
@@ -90,6 +103,13 @@ class BlockRenderer extends BlockAbstract
         return rest_ensure_response($APIData);
     }
 
+    /**
+     * Get data table headers
+     *
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws NotFoundException
+     */
     public static function getTableHeaders(): WP_Error|WP_REST_Response|WP_HTTP_Response
     {
         $APIData = APIDataRepository::getAPIData();
