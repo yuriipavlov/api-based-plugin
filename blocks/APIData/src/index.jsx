@@ -21,8 +21,6 @@ registerBlockType(metadata, {
       className: [className],
     });
 
-    const {columns} = attributes;
-
     const [headers, setTableHeaders] = useState([]);
 
     useEffect(() => {
@@ -46,14 +44,17 @@ registerBlockType(metadata, {
                 {headers.map((header, index) => (
                   <CheckboxControl
                     label={header}
-                    checked={attributes.columns[index]}
+                    checked={attributes.columns.includes(index)}
                     onChange={(isChecked) => {
-                      const newColumns = isChecked
-                        ? [...attributes.columns, header]
-                        : attributes.columns.filter(location => location !== header);
-                      setAttributes({ columns: newColumns });
+                      let updatedColumns;
+                      if (isChecked) {
+                        updatedColumns = [...attributes.columns, index];
+                      } else {
+                        updatedColumns = attributes.columns.filter(item => item !== index);
+                      }
+                      setAttributes({columns: updatedColumns});
                     }}
-                    key={header}
+                    key={`${header}-${index}`}
                   />
                 ))}
               </>
