@@ -39,6 +39,12 @@ class AdminShowData
      */
     public static function APIDataTablePage(): void
     {
+        // Check if the button is pressed
+        if (isset($_POST['refresh_api_data']) && check_admin_referer('refresh_api_data_action', 'refresh_api_data_field')) {
+            APIDataRepository::fetchAPIData();
+            echo '<p>' . esc_html__('Data has been refreshed!', 'api-based-plugin') . '</p>';
+        }
+
         $APIData = APIDataRepository::getAPIData();
 
         // Start building the HTML output
@@ -61,7 +67,6 @@ class AdminShowData
         // Data rows
         if (!empty($APIData->data->rows)) {
             foreach ($APIData->data->rows as $row) {
-
                 echo '<tr>';
                 foreach ($row as $colIndex => $colData) {
                     echo '<td>';
@@ -73,12 +78,21 @@ class AdminShowData
                     echo '</td>';
                 }
                 echo '</tr>';
-
             }
         }
         echo '</tbody>';
         echo '</table>';
+
+        echo '<form method="post" action="">';
+
+            // Security field for CSRF protection
+            wp_nonce_field('refresh_api_data_action', 'refresh_api_data_field');
+
+        echo '<p class="submit">';
+        echo '<input type="submit" name="refresh_api_data" id="refresh_api_data" class="button button-primary" value="' . esc_html__('Refresh Data', 'api-based-plugin') . '">';
+        echo '</p>';
+        echo '</form>';
+
         echo '</div>';
     }
-
 }

@@ -18,13 +18,15 @@ use Psr\Container\NotFoundExceptionInterface;
 class APIDataRepository
 {
     /**
-     * Get API data and store it in transient for 1 hour
+     * Get API data
+     *
+     * @return object
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
      * @throws NotFoundException
      */
-    public static function getAPIData()
+    public static function getAPIData(): object
     {
         $prefix = Config::get('settingsPrefix');
 
@@ -36,12 +38,28 @@ class APIDataRepository
         }
 
         // If there is no data in the transient, fetch it from the URL
+        return self::fetchAPIData();
+    }
+
+    /**
+     * Fetch API data from external source and save it in transient for 1 hour
+     *
+     * @return object
+     *
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundException
+     * @throws NotFoundExceptionInterface
+     */
+    public static function fetchAPIData(): object
+    {
+        $prefix = Config::get('settingsPrefix');
+
         $dataSourceUrl = Utils::getOption('data_source_url', '');
 
         $response = wp_remote_get($dataSourceUrl);
 
         if (empty($response) || is_wp_error($response)) {
-            return [];
+            return new \stdClass();
         }
 
         $body    = wp_remote_retrieve_body($response);
