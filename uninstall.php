@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Plugin Uninstall
  *
@@ -21,7 +22,9 @@ function uninstallDeleteData(string $prefix): void
 {
     global $wpdb;
 
-    $pluginOptions = $wpdb->get_results("SELECT option_name FROM  {$wpdb->prefix}options WHERE option_name LIKE '{$prefix}%' ");
+    $pluginOptions = $wpdb->get_results(
+        "SELECT option_name FROM  {$wpdb->prefix}options WHERE option_name LIKE '{$prefix}%' "
+    );
 
     foreach ($pluginOptions as $pluginOption) {
         delete_option($pluginOption->option_name);

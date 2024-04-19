@@ -17,7 +17,7 @@ $data = $data ?? [];
         <tr>
             <?php foreach ($data['columns'] as $column) {
                 if (isset($data['apiData']->data->headers[$column])) { ?>
-                    <th><?php echo htmlspecialchars($data['apiData']->data->headers[$column]); ?> </th>
+                    <th><?php echo esc_html($data['apiData']->data->headers[$column]); ?> </th>
                 <?php }
             } ?>
         </tr>
@@ -28,7 +28,11 @@ $data = $data ?? [];
                 <?php foreach ($row as $colIndex => $colData) { ?>
                     <?php if (in_array($index, $data['columns'])) { ?>
                         <td>
-                            <?php echo $colIndex === 'date' ? date('Y-m-d H:i:s', $colData) : $colData; ?>
+                            <?php if ($colIndex === 'date') {
+                                echo date('Y-m-d H:i:s', esc_html($colData));
+                            } else {
+                                echo esc_html($colData);
+                            } ?>
                         </td>
                     <?php } ?>
                     <?php $index++; ?>

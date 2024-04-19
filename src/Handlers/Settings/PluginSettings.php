@@ -4,11 +4,11 @@ namespace APIBasedPlugin\Handlers\Settings;
 
 defined('ABSPATH') || exit;
 
+use APIBasedPlugin\Helper\Config;
+use APIBasedPlugin\Helper\NotFoundException;
 use Carbon_Fields\Carbon_Fields;
 use Carbon_Fields\Container;
 use Carbon_Fields\Field;
-use APIBasedPlugin\Helper\Config;
-use APIBasedPlugin\Helper\NotFoundException;
 
 /**
  * Theme settings handler
@@ -51,7 +51,11 @@ class PluginSettings
         $container->add_tab(
             __('General', 'api-based-plugin'),
             [
-                Field::make('text', $prefix . 'data_source_url', esc_html__('External data source URL', 'api-based-plugin'))
+                Field::make(
+                    'text',
+                    $prefix . 'data_source_url',
+                    esc_html__('External data source URL', 'api-based-plugin')
+                )
                     ->set_attribute('placeholder', 'https://example.com/v1/endpoint/ ')
                     ->set_width(50),
             ]

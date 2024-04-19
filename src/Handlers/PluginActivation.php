@@ -11,7 +11,6 @@ defined('ABSPATH') || exit;
  */
 class PluginActivation
 {
-
     public static function activateHandler(): void
     {
         // Do activation action
@@ -21,5 +20,4 @@ class PluginActivation
     {
         // Do deactivation action
     }
-
 }
