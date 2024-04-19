@@ -4,8 +4,8 @@ namespace APIBasedPlugin\Handlers\CLI;
 
 defined('ABSPATH') || exit;
 
-use APIBasedPlugin\Helper\Utils;
 use APIBasedPlugin\Handlers\Errors\ErrorHandler;
+use APIBasedPlugin\Helper\Utils;
 use Throwable;
 use WP_CLI;
 
@@ -29,7 +29,7 @@ class CLI
         }
 
         try {
-            //WP_CLI::add_command('refresh-data', [Commands\RefreshData::class, 'run']);
+            WP_CLI::add_command('fetch-api-data', [Commands\RefreshAPIData::class, 'run']);
         } catch (Throwable $throwable) {
             ErrorHandler::handleThrowable($throwable);
         }
