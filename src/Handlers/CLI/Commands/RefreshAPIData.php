@@ -15,7 +15,7 @@ use WP_CLI;
  *
  * @package    Starter Kit
  */
-class RefreshAPIData
+class RefreshAPIData implements CLICommandInterface
 {
     /**
      * Run the command
@@ -34,5 +34,4 @@ class RefreshAPIData
 
         WP_CLI::success(esc_html__('Data has been refreshed!', 'api-based-plugin'));
     }
-
 }

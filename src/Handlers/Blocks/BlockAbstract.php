@@ -14,7 +14,7 @@ use Throwable;
  *
  * @package    API Based
  */
-abstract class BlockAbstract implements BlockInterface
+abstract class BlockAbstract
 {
     /**
      * Load block view
