@@ -11,7 +11,7 @@ A simple plugin that retrieves data from a remote API endpoint, and makes that d
 
 ### Installation
 
-1. Clone API Based Plugin to plugins dirrectory:
+1. Clone API Based Plugin to WordPress plugins directory (`wp-content/plugins`)
 
 2. Setup php dependencies:
 
