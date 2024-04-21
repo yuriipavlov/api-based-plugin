@@ -25,15 +25,6 @@ composer install
 npm run install-dev
 ```
 
-<!-- 5. Edit theme config object in `gulpfile.js`. Change theme name, theme prefix, main class, etc.
-
-
-5. Run replace names command:
-
-```bash
-npm run replaceNames
-```
--->
 ### Build commands
 
 - Build minified assets for production:
@@ -64,6 +55,17 @@ npm run watch
 - `yarn browser-sync` - start watcher with browser sync;
 
 </details>
+
+### Setup
+
+1. After all build done, go to wp-admin and activate the plugin
+
+2. Go to `Settings` --> `API Based Settings` and add External API data source URL, save
+
+3. Go to `API Data` menu item and check the data table
+
+4. Push `Refresh` button to refresh the data
+
 
 ## Blocks
 
