@@ -1,3 +1,6 @@
+/* global APIBasedPluginFrontendData */
+const {restApiUrl, restNamespace, restNonce} = APIBasedPluginFrontendData;
+
 /**
  * Block front class
  */
@@ -10,24 +13,51 @@ export default class FrontendModule {
    */
   constructor(apiDataBlock) {
     this.apiDataBlock = apiDataBlock;
-    this.someThingInner = apiDataBlock.querySelector(".some-class");
 
-    // eslint-disable-next-line no-console
-    console.log('apiDataBlock FrontendModule loaded');
+    const columnsData = this.apiDataBlock.getAttribute('data-columns');
 
-    this.doSomething(this.someThingInner);
+    this.apiDataBlock.classList.add('spinner');
+
+    this.fetchAPIData(columnsData).then(data => {
+      this.apiDataBlock.classList.remove('spinner');
+      this.apiDataBlock.innerHTML = data;
+
+      /**
+       *  Create and dispatch the apiDataBlockFetchComplete event
+       *  Need to re-init blocks after apiDataBlock section fetch complete
+       */
+      const apiDataBlockFetchComplete = new CustomEvent('apiDataBlockFetchComplete',
+        {
+          detail: {
+            responseData: data,
+            columns: columnsData,
+          },
+        });
+      document.dispatchEvent(apiDataBlockFetchComplete);
+
+    });
 
   }
 
-  doSomething(someThingInner) {
-    const self = this;
+  fetchAPIData(columnsParam) {
+    const url = new URL(restApiUrl + restNamespace + '/api-data');
 
-    // Using 'self' to access the class instance inside the event listener
-    // eslint-disable-next-line no-console
-    console.log(self.apiDataBlock);
-    // eslint-disable-next-line no-console
-    console.log('apiDataBlock FrontendModule Something happened' + someThingInner);
-    // Do something
+    const params = {
+      columns: encodeURIComponent(columnsParam),
+      nonce: restNonce,
+    };
+
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
+    return fetch(url, {method: 'GET'})
+      .then(response => response.json())
+      .then(response => {
+        return response.data;
+      })
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.error('Error:', error);
+      });
   }
 
 }

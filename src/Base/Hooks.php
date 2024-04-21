@@ -33,6 +33,11 @@ class Hooks
         add_action('admin_menu', [Handlers\AdminShowData::class, 'addPageToMenu']);
 
         /************************************
+         *            Front
+         ************************************/
+        add_action('wp_enqueue_scripts', [Handlers\Front::class, 'loadFrontendJsData']);
+
+        /************************************
          *         Gutenberg blocks
          ************************************/
         add_action('block_categories_all', [Handlers\Blocks\Register::class, 'registerBlocksCategories']);

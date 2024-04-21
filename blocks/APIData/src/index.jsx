@@ -10,18 +10,20 @@ const {registerBlockType} = wp.blocks;
 const {useBlockProps} = wp.blockEditor;
 const {InspectorControls} = wp.blockEditor;
 const {PanelBody, CheckboxControl, Spinner} = wp.components;
-const {serverSideRender: ServerSideRender} = wp;
 const {useState, useEffect} = wp.element;
 const {__} = wp.i18n;
+
+const blockMainCssClass = 'api-data-block';
 
 registerBlockType(metadata, {
   edit: (props) => {
     const {attributes, className, setAttributes} = props;
 
     const blockProps = useBlockProps({
-      className: [className],
+      className: [blockMainCssClass, className],
     });
 
+    const [APIData, setAPIData] = useState([]);
     const [headers, setTableHeaders] = useState([]);
 
     useEffect(() => {
@@ -34,6 +36,24 @@ registerBlockType(metadata, {
           console.error(__('Error fetching table headers: ', 'api-based-plugin'), error);
         });
     }, []); // The empty dependency array ensures this effect runs only once when the component mounts
+
+    useEffect(() => {
+
+      const columnsData = btoa(JSON.stringify(attributes.columns || [])); // Ensure columns attribute exists and is used
+      const encodedColumnsData = encodeURIComponent(columnsData);
+
+      wp.apiFetch({path: '/abp/v1/api-data?columns=' + encodedColumnsData})
+        .then(response => {
+          if (response.code === 'success' && response.data) {
+            setAPIData(response.data);
+          }
+        })
+        .catch(error => {
+          // eslint-disable-next-line no-console
+          console.error(__('Error fetching API data: ', 'api-based-plugin'), error);
+        });
+
+    }, [attributes.columns]);
 
     const renderControls = (
       <InspectorControls key="API Data Settings">
@@ -66,11 +86,7 @@ registerBlockType(metadata, {
     );
 
     const renderOutput = (
-      <div {...blockProps} key="serverRender">
-        <ServerSideRender
-          block={metadata.name}
-          attributes={attributes}
-        />
+      <div {...blockProps} dangerouslySetInnerHTML={{__html: APIData}}>
       </div>
     );
 
@@ -79,8 +95,17 @@ registerBlockType(metadata, {
       renderOutput,
     ];
   }, // end edit
-  save: () => {
-    // Rendering in PHP
-    return null;
+  save: (props) => {
+
+    const {attributes} = props;
+    const columnsData = btoa(JSON.stringify(attributes.columns || [])); // Ensure columns attribute exists and is used
+
+    return (
+      <div
+        className={blockMainCssClass}
+        data-columns={columnsData}
+      >
+      </div>
+    );
   },
 });

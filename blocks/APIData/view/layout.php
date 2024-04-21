@@ -12,7 +12,7 @@ $data = $data ?? [];
 
 ?>
 
-<div class="api-data-block">
+<div class="api-data-inner">
     <?php if (!empty($data['apiData']->title)) { ?>
         <h2><?php echo esc_html($data['apiData']->title); ?></h2>
     <?php } ?>

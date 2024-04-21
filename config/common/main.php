@@ -4,7 +4,7 @@ return [
     'config' => [
         'pluginName'          => 'API Based Plugin',
         'package'             => 'API Based',
-        'themeSlug'           => 'api-based-plugin',
+        'pluginSlug'          => 'api-based-plugin',
         'pluginNamespace'     => 'APIBasedPlugin',
         'hooksPrefix'         => 'api_based_plugin',
         'settingsPrefix'      => 'abp_',

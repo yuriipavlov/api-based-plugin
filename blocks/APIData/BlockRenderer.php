@@ -23,34 +23,6 @@ use WP_REST_Response;
 class BlockRenderer extends BlockAbstract
 {
     /**
-     * Block server side render callback
-     * Used in register block type from metadata
-     *
-     * @param $attributes
-     * @param $content
-     * @param $block
-     *
-     * @return string
-     *
-     * @throws ContainerExceptionInterface
-     * @throws NotFoundException
-     * @throws NotFoundExceptionInterface
-     */
-    public static function blockServerSideCallback($attributes, $content, $block): string
-    {
-        $templateData = [];
-
-        $APIData = APIDataRepository::getAPIData();
-
-        $templateData['apiData'] = $APIData;
-        $templateData['columns'] = !empty($attributes['columns']) ? $attributes['columns'] : [];
-
-        asort($templateData['columns']);
-
-        return self::loadBlockView('layout', $templateData);
-    }
-
-    /**
      * Register rest api endpoints
      * Runs by Blocks Register Handler
      *
@@ -62,7 +34,7 @@ class BlockRenderer extends BlockAbstract
      */
     public static function blockRestApiEndpoints(): void
     {
-        register_rest_route(Config::get('restApiNamespace'), '/api-data', [
+            register_rest_route(Config::get('restApiNamespace'), '/api-data', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'getDataCallback'],
             'permission_callback' => '__return_true',
@@ -88,19 +60,32 @@ class BlockRenderer extends BlockAbstract
      */
     public static function getDataCallback(WP_REST_Request $request): WP_Error|WP_REST_Response|WP_HTTP_Response
     {
-        $requestData = esc_sql(json_decode($request->get_body(), true));
-        if (empty($requestData)) {
-            status_header(404);
-            nocache_headers();
-            exit;
-        }
-        $params        = $requestData['params'];
-        $requestedPage = $requestData['page'] ?? 1;
+        elog($request->get_params());
+        $params = $request->get_params();
+        /*        $requestData = esc_sql(json_decode($request->get_body(), true));
+                if (empty($requestData)) {
+                    status_header(404);
+                    nocache_headers();
+                    exit;
+                }*/
+
         //$nonce         = $requestData['nonce'];
+
+        $templateData = [];
 
         $APIData = APIDataRepository::getAPIData();
 
-        return rest_ensure_response($APIData);
+        $templateData['apiData'] = $APIData;
+        $templateData['columns'] = [];
+
+        if (!empty($params['columns'])) {
+            $templateData['columns'] = array_map('intval', explode(",", base64_decode($params['columns'])));
+        }
+
+        elog( $templateData['columns']);
+        asort($templateData['columns']);
+
+        return rest_ensure_response(['code' => 'success', 'data' => self::loadBlockView('layout', $templateData)]);
     }
 
     /**
