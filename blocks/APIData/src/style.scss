@@ -1,4 +1,8 @@
-// @import "../../../assets/src/styles/utils/variables";
-// @import "../../../assets/src/styles/utils/mixins";
+// Import Bootstrap functions and variables first
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
 
-// block styles
+// Then import the rest of Bootstrap
+@import '~bootstrap/scss/mixins';
+@import '~bootstrap/scss/reboot';
+@import '~bootstrap/scss/tables';
