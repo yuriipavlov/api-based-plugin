@@ -19,7 +19,6 @@ use Psr\Container\NotFoundExceptionInterface;
  */
 class Front
 {
-
     /**
      * Load additional JS data variables
      *

@@ -60,7 +60,14 @@ export default class FrontendModule {
     return fetch(url, fetchOptions)
       .then(response => response.json())
       .then(response => {
-        return response.data;
+        if (response.code === 'success' && response.data) {
+          return response.data;
+        }
+        if (response.message) {
+          return response.message;
+        }
+        // eslint-disable-next-line no-console
+        console.error('Error fetching API data');
       })
       .catch(error => {
         // eslint-disable-next-line no-console

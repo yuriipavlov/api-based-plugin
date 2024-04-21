@@ -46,6 +46,11 @@ registerBlockType(metadata, {
         .then(response => {
           if (response.code === 'success' && response.data) {
             setAPIData(response.data);
+          } else if (response.message1) {
+            setAPIData(response.message1);
+          } else {
+            // eslint-disable-next-line no-console
+            console.error(__('Error fetching API data', 'api-based-plugin'));
           }
         })
         .catch(error => {

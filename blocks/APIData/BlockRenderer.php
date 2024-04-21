@@ -34,7 +34,7 @@ class BlockRenderer extends BlockAbstract
      */
     public static function blockRestApiEndpoints(): void
     {
-            register_rest_route(Config::get('restApiNamespace'), '/api-data', [
+        register_rest_route(Config::get('restApiNamespace'), '/api-data', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'getDataCallback'],
             'permission_callback' => [self::class, 'getNoncePermissionCheck'],
@@ -70,13 +70,18 @@ class BlockRenderer extends BlockAbstract
         $templateData['columns'] = [];
 
         if (!empty($params['columns'])) {
-            $columnsData = urldecode($params['columns']);
+            $columnsData             = urldecode($params['columns']);
             $templateData['columns'] = json_decode(base64_decode($columnsData), true);
         }
 
         asort($templateData['columns']);
 
-        return rest_ensure_response(['code' => 'success', 'data' => self::loadBlockView('layout', $templateData)]);
+        $response = [
+            'code' => 'success',
+            'data' => self::loadBlockView('layout', $templateData),
+        ];
+
+        return new WP_REST_Response($response, 200);
     }
 
     /**
@@ -93,13 +98,20 @@ class BlockRenderer extends BlockAbstract
         return rest_ensure_response($APIData->data->headers);
     }
 
-    public static function getNoncePermissionCheck($request)
+    /**
+     * Check nonce
+     *
+     * @param $request
+     *
+     * @return bool|int
+     */
+    public static function getNoncePermissionCheck($request): bool
     {
         return wp_verify_nonce($request->get_header('X-WP-Nonce'), 'wp_rest');
     }
 
     /**
-     * Allow only backend users to get menus data
+     * Allow only backend users to get headers data
      *
      * @return bool
      */
