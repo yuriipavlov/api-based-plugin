@@ -3,7 +3,7 @@
  */
 const mix = require('laravel-mix');
 const glob = require('glob');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 /**
  * Setup options
  * https://laravel-mix.com/docs/6.0/api#optionsoptions
