@@ -103,7 +103,7 @@ registerBlockType(metadata, {
     return (
       <div
         className={blockMainCssClass}
-        data-columns={columnsData}
+        data-columns={encodeURIComponent(columnsData)}
       >
       </div>
     );

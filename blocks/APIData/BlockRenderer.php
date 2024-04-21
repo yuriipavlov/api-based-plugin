@@ -37,7 +37,7 @@ class BlockRenderer extends BlockAbstract
             register_rest_route(Config::get('restApiNamespace'), '/api-data', [
             'methods'             => 'GET',
             'callback'            => [self::class, 'getDataCallback'],
-            'permission_callback' => '__return_true',
+            'permission_callback' => [self::class, 'getNoncePermissionCheck'],
         ]);
 
         register_rest_route(Config::get('restApiNamespace'), '/get-table-headers', [
@@ -60,16 +60,7 @@ class BlockRenderer extends BlockAbstract
      */
     public static function getDataCallback(WP_REST_Request $request): WP_Error|WP_REST_Response|WP_HTTP_Response
     {
-        elog($request->get_params());
         $params = $request->get_params();
-        /*        $requestData = esc_sql(json_decode($request->get_body(), true));
-                if (empty($requestData)) {
-                    status_header(404);
-                    nocache_headers();
-                    exit;
-                }*/
-
-        //$nonce         = $requestData['nonce'];
 
         $templateData = [];
 
@@ -79,10 +70,10 @@ class BlockRenderer extends BlockAbstract
         $templateData['columns'] = [];
 
         if (!empty($params['columns'])) {
-            $templateData['columns'] = array_map('intval', explode(",", base64_decode($params['columns'])));
+            $columnsData = urldecode($params['columns']);
+            $templateData['columns'] = json_decode(base64_decode($columnsData), true);
         }
 
-        elog( $templateData['columns']);
         asort($templateData['columns']);
 
         return rest_ensure_response(['code' => 'success', 'data' => self::loadBlockView('layout', $templateData)]);
@@ -100,6 +91,11 @@ class BlockRenderer extends BlockAbstract
         $APIData = APIDataRepository::getAPIData();
 
         return rest_ensure_response($APIData->data->headers);
+    }
+
+    public static function getNoncePermissionCheck($request)
+    {
+        return wp_verify_nonce($request->get_header('X-WP-Nonce'), 'wp_rest');
     }
 
     /**

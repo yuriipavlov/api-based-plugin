@@ -39,7 +39,7 @@ class Front
         $frontendData = [
             'restApiUrl'    => get_rest_url(),
             'restNamespace' => Config::get('restApiNamespace'),
-            'restNonce'     => wp_create_nonce($prefix . 'plugin_rest_nonce'),
+            'restNonce'     => wp_create_nonce('wp_rest'),
         ];
 
         wp_localize_script($pluginSlug . '-front-vars', $pluginNamespace . 'FrontendData', $frontendData);

@@ -43,13 +43,21 @@ export default class FrontendModule {
     const url = new URL(restApiUrl + restNamespace + '/api-data');
 
     const params = {
-      columns: encodeURIComponent(columnsParam),
-      nonce: restNonce,
+      columns: columnsParam,
     };
 
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
 
-    return fetch(url, {method: 'GET'})
+    // Set up the options for the fetch request, including headers
+    const fetchOptions = {
+      method: 'GET',
+      headers: {
+        'X-WP-Nonce': restNonce,
+        'Content-Type': 'application/json',
+      },
+    };
+
+    return fetch(url, fetchOptions)
       .then(response => response.json())
       .then(response => {
         return response.data;
