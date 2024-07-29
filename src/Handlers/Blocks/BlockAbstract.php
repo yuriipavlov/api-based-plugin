@@ -117,7 +117,9 @@ abstract class BlockAbstract implements BlockInterface
             if (file_exists($viewFilePath)) {
                 require $viewFilePath;
             } else {
-                throw new RuntimeException(esc_html__('The view path ' . $viewFilePath . ' can not be found.', 'api-based-plugin'));
+                throw new RuntimeException(
+                    esc_html__('The view path ' . $viewFilePath . ' can not be found.', 'api-based-plugin')
+                );
             }
         } catch (Throwable $throwable) {
             ErrorHandler::handleThrowable($throwable);
