@@ -40,9 +40,8 @@ class Hooks
         /************************************
          *         Gutenberg blocks
          ************************************/
-        add_action('block_categories_all', [Handlers\Blocks\Register::class, 'registerBlocksCategories']);
-        add_action('init', [Handlers\Blocks\Register::class, 'registerBlocks']);
-
+        add_action('block_categories_all', [Handlers\Blocks\Init::class, 'loadBlocksCategories']);
+        add_action('init', [Handlers\Blocks\Init::class, 'loadBlocks']);
 
         /************************************
          *               Back

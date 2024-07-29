@@ -11,7 +11,7 @@ use Carbon_Fields\Container;
 use Carbon_Fields\Field;
 
 /**
- * Theme settings handler
+ * Plugin settings handler
  *
  * @package    API Based
  */

@@ -4,8 +4,6 @@ namespace APIBasedPlugin\Helper;
 
 defined('ABSPATH') || exit;
 
-use APIBasedPlugin\Helper\Config;
-
 /**
  * Utilities
  *
@@ -221,5 +219,18 @@ class Utils
         }
 
         return $is_rest_api_request;
+    }
+
+    /**
+     * Convert a string from camel case (like "SomeString") to a kebab-case format (like "some-string").
+     * @param $input
+     *
+     * @return string
+     */
+    public static function camelToKebab($input): string
+    {
+        $output = preg_replace('/(?<!^)[A-Z]/', '-$0', $input);
+
+        return strtolower($output);
     }
 }
