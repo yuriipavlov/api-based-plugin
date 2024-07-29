@@ -10,6 +10,7 @@ const {registerBlockType} = wp.blocks;
 const {useBlockProps} = wp.blockEditor;
 const {InspectorControls} = wp.blockEditor;
 const {PanelBody, CheckboxControl, Spinner} = wp.components;
+const {serverSideRender: ServerSideRender} = wp;
 const {useState, useEffect} = wp.element;
 const {__} = wp.i18n;
 
@@ -24,30 +25,15 @@ registerBlockType(metadata, {
     });
 
     const [APIData, setAPIData] = useState([]);
-    const [headers, setTableHeaders] = useState([]);
-
-    useEffect(() => {
-      wp.apiFetch({path: '/abp/v1/get-table-headers'})
-        .then(fetchedTableHeaders => {
-          setTableHeaders(fetchedTableHeaders);
-        })
-        .catch(error => {
-          // eslint-disable-next-line no-console
-          console.error(__('Error fetching table headers: ', 'api-based-plugin'), error);
-        });
-    }, []); // The empty dependency array ensures this effect runs only once when the component mounts
 
     useEffect(() => {
 
-      const columnsData = btoa(JSON.stringify(attributes.columns || [])); // Ensure columns attribute exists and is used
-      const encodedColumnsData = encodeURIComponent(columnsData);
-
-      wp.apiFetch({path: '/abp/v1/api-data?columns=' + encodedColumnsData})
+      wp.apiFetch({path: '/abp/v1/api-data'})
         .then(response => {
           if (response.code === 'success' && response.data) {
             setAPIData(response.data);
-          } else if (response.message1) {
-            setAPIData(response.message1);
+          } else if (response.message) {
+            setAPIData(response.message);
           } else {
             // eslint-disable-next-line no-console
             console.error(__('Error fetching API data', 'api-based-plugin'));
@@ -58,40 +44,33 @@ registerBlockType(metadata, {
           console.error(__('Error fetching API data: ', 'api-based-plugin'), error);
         });
 
-    }, [attributes.columns]);
+    }, [attributes.testParam]); // The empty dependency array ensures this effect runs only once when the component mounts
 
     const renderControls = (
       <InspectorControls key="API Data Settings">
-        <PanelBody title={__('Headers', 'api-based-plugin')} initialOpen={true}>
-          {headers.length < 1
-            ? <Spinner key="siteSpinner"/>
-            : (
-              <>
-                {headers.map((header, index) => (
-                  <CheckboxControl
-                    label={header}
-                    checked={attributes.columns.includes(index)}
-                    onChange={(isChecked) => {
-                      let updatedColumns;
-                      if (isChecked) {
-                        updatedColumns = [...attributes.columns, index];
-                      } else {
-                        updatedColumns = attributes.columns.filter(item => item !== index);
-                      }
-                      setAttributes({columns: updatedColumns});
-                    }}
-                    key={`${header}-${index}`}
-                  />
-                ))}
-              </>
-            )
-          }
+        <PanelBody title={__('API Data Settings', 'api-based-plugin')}>
+          <CheckboxControl
+            label={__('Test Param', 'api-based-plugin')}
+            checked={attributes.testParam}
+            onChange={(testParam) => setAttributes({testParam})}
+          />
         </PanelBody>
       </InspectorControls>
     );
 
     const renderOutput = (
-      <div {...blockProps} dangerouslySetInnerHTML={{__html: APIData}}>
+      <div {...blockProps}>
+        {(APIData && attributes.testParam) ? (
+          <div dangerouslySetInnerHTML={{__html: APIData}}/>
+        ) : (
+          <>
+            <Spinner key="siteSpinner"/>
+            <ServerSideRender
+              block={metadata.name}
+              attributes={attributes}
+            />
+          </>
+        )}
       </div>
     );
 
@@ -100,17 +79,8 @@ registerBlockType(metadata, {
       renderOutput,
     ];
   }, // end edit
-  save: (props) => {
-
-    const {attributes} = props;
-    const columnsData = btoa(JSON.stringify(attributes.columns || [])); // Ensure columns attribute exists and is used
-
-    return (
-      <div
-        className={blockMainCssClass}
-        data-columns={encodeURIComponent(columnsData)}
-      >
-      </div>
-    );
+  save: () => {
+    // Rendering in PHP
+    return null;
   },
 });

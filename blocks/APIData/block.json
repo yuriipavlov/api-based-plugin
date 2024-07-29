@@ -15,12 +15,9 @@
   "supports": {},
   "example": {},
   "attributes": {
-    "columns": {
-      "type": "array",
-      "default": [0,1,2,3,4]
+    "testParam": {
+      "type": "boolean",
+      "default": true
     }
-  },
-  "editorScript": "file:build/index.js",
-  "viewScript": "file:build/view.js",
-  "style": "file:build/style.css"
+  }
 }

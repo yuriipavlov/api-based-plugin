@@ -13,39 +13,27 @@ $data = $data ?? [];
 ?>
 
 <div class="api-data-inner">
-    <?php if (!empty($data['apiData']->title)) { ?>
-        <h2><?php echo esc_html($data['apiData']->title); ?></h2>
-    <?php } ?>
     <table class="table table-striped table-hover">
         <thead class="thead-dark">
             <tr>
-                <?php foreach ($data['columns'] as $column) {
-                    if (isset($data['apiData']->data->headers[$column])) { ?>
-                        <th scope="col"><?php echo esc_html($data['apiData']->data->headers[$column]); ?> </th>
-                    <?php }
-                } ?>
+                <th scope="col"><?php esc_html_e('ID', 'api-based-plugin') ?></th>
+                <th scope="col"><?php esc_html_e('First Name', 'api-based-plugin') ?></th>
+                <th scope="col"><?php esc_html_e('Last Name', 'api-based-plugin') ?></th>
+                <th scope="col"><?php esc_html_e('Email', 'api-based-plugin') ?></th>
+                <th scope="col"><?php esc_html_e('Date', 'api-based-plugin') ?></th>
             </tr>
         </thead>
         <tbody>
-            <?php if (!empty($data['apiData']->data->rows)) { ?>
-                <?php foreach ($data['apiData']->data->rows as $row) { ?>
-                    <tr>
-                        <?php $index = 0; ?>
-                        <?php foreach ($row as $colIndex => $colData) { ?>
-                            <?php if (in_array($index, $data['columns'])) { ?>
-                                <td>
-                                    <?php if ($colIndex === 'date') {
-                                        echo date('Y-m-d H:i:s', esc_html($colData));
-                                    } else {
-                                        echo esc_html($colData);
-                                    } ?>
-                                </td>
-                            <?php } ?>
-                            <?php $index++; ?>
-                        <?php } ?>
-                    </tr>
-                <?php } ?>
-            <?php } ?>
+        <?php if (!empty($data['apiData'])) {
+            $this->loadBlockView(
+                'table-body',
+                [
+                    'apiData' => $data['apiData'],
+                ],
+                null,
+                true
+            );
+        } ?>
         </tbody>
     </table>
 </div>
