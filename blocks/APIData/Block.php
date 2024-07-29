@@ -19,7 +19,7 @@ use WP_REST_Response;
 /**
  * Block controller
  *
- * @package    Starter Kit
+ * @package    API Based
  */
 class Block extends BlockAbstract
 {

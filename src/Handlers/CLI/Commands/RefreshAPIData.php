@@ -13,7 +13,7 @@ use WP_CLI;
 /**
  * WP-CLI Command to refresh API data
  *
- * @package    Starter Kit
+ * @package    API Based
  */
 class RefreshAPIData implements CLICommandInterface
 {
