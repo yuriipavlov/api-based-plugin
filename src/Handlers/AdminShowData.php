@@ -52,49 +52,44 @@ class AdminShowData
 
         // Start building the HTML output
         echo '<div class="wrap">';
-        if (!empty($APIData->title)) {
-            echo '<h1>' . esc_html($APIData->title) . '</h1>';
-        }
-        echo '<table class="widefat fixed" cellspacing="0">';
-        echo '<thead><tr>';
+        echo '<h1>' . esc_html__('API Data', 'api-based-plugin') . '</h1>';
+        // Check if the data is loaded successfully
+        if ($APIData->status === 'OK' && !empty($APIData->data)) {
+            echo '<table class="widefat fixed" cellspacing="0">';
+            echo '<thead><tr>';
+            // Header row
+            echo '<th>' . esc_html__('ID', 'api-based-plugin') . '</th>';
+            echo '<th>' . esc_html__('First Name', 'api-based-plugin') . '</th>';
+            echo '<th>' . esc_html__('Last Name', 'api-based-plugin') . '</th>';
+            echo '<th>' . esc_html__('Email', 'api-based-plugin') . '</th>';
+            echo '<th>' . esc_html__('Date', 'api-based-plugin') . '</th>';
+            echo '</tr></thead>';
+            echo '<tbody>';
 
-        // Header row
-        if (!empty($APIData->data->headers)) {
-            foreach ($APIData->data->headers as $header) {
-                echo '<th>' . esc_html($header) . '</th>';
-            }
-        }
-        echo '</tr></thead>';
-        echo '<tbody>';
-
-        // Data rows
-        if (!empty($APIData->data->rows)) {
-            foreach ($APIData->data->rows as $row) {
+            // Data rows
+            foreach ($APIData->data as $item) {
                 echo '<tr>';
-                foreach ($row as $colIndex => $colData) {
-                    echo '<td>';
-                    if ($colIndex === 'date') {
-                        echo date('Y-m-d H:i:s', esc_html($colData));
-                    } else {
-                        echo esc_html($colData);
-                    }
-                    echo '</td>';
-                }
+                echo '<td>' . esc_html($item->id) . '</td>';
+                echo '<td>' . esc_html($item->firstName) . '</td>';
+                echo '<td>' . esc_html($item->lastName) . '</td>';
+                echo '<td>' . esc_html($item->email) . '</td>';
+                echo '<td>' . esc_html($item->date) . '</td>';
                 echo '</tr>';
             }
+
+            echo '</tbody>';
+            echo '</table>';
+        } else {
+            echo '<p>Failed to load data</p>';
         }
-        echo '</tbody>';
-        echo '</table>';
 
+        // Form for refreshing data
         echo '<form method="post" action="">';
-
-            // Security field for CSRF protection
-            wp_nonce_field('refresh_api_data_action', 'refresh_api_data_field');
-
+        wp_nonce_field('refresh_api_data_action', 'refresh_api_data_field');
         echo '<p class="submit">';
         echo '<input type="submit" name="refresh_api_data" class="button button-primary" value="' .
-             esc_html__('Refresh Data', 'api-based-plugin') .
-             '">';
+            esc_html__('Refresh Data', 'api-based-plugin') .
+            '">';
         echo '</p>';
         echo '</form>';
 

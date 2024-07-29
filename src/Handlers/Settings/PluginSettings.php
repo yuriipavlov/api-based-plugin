@@ -57,7 +57,13 @@ class PluginSettings
                     esc_html__('External data source URL', 'api-based-plugin')
                 )
                     ->set_attribute('placeholder', 'https://example.com/v1/endpoint/ ')
-                    ->set_width(50),
+                    ->set_help_text(
+                        __(
+                            "Use this URL https://fakerapi.it/api/v1/custom?id=number&" .
+                            "firstName=firstName&lastName=lastName&email=email&date=date",
+                            'api-based-plugin'
+                        )
+                    )
             ]
         );
     }
