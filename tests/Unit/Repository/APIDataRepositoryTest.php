@@ -24,10 +24,6 @@ class APIDataRepositoryTest extends TestCase
          ->with('data_source_url', '')
          ->andReturn('https://example.com/api');
 
-        if (!defined('ABSPATH')) {
-            define('ABSPATH', '/var/www/html/');
-        }
-
         if (!defined('HOUR_IN_SECONDS')) {
             define('HOUR_IN_SECONDS', 3600);
         }
