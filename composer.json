@@ -21,8 +21,10 @@
     "php-di/php-di": "7.0.6"
   },
   "require-dev": {
+    "10up/wp_mock": "^0.4.2",
     "dealerdirect/phpcodesniffer-composer-installer": "1.0.0",
     "filp/whoops": "2.15.4",
+    "mockery/mockery": "^1.6",
     "phpcompatibility/phpcompatibility-wp": "2.1.4",
     "phpunit/phpunit": "10.5.3",
     "roave/security-advisories": "dev-latest",
